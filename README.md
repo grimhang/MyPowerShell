@@ -1,7 +1,7 @@
-# Azure SQL Data Warehouse 가이드 (Simple)
+# Tibero 조사 쿼리(Simple)
 
 
-## 1. Azure DW
+## 1. Tibero 조사 쿼리
 Azure SQL DW는 페타바이트의 대용량 분석 업무로 개발된 클라우드 전용 PaaS DW 제품군.  
 MS-SQL을 기본 엔진으로 발전하였기 때문에 기존 MS-SQL에 익숙한 사람들은 좀더 사용하기 유리하다.  
 하지만 클라우드만의 특별한 기능들이 추가되었기 때문에 기존 온프레미스 사용자들은 추가적인 개념 학습 필요. 
@@ -15,6 +15,13 @@ MS-SQL을 기본 엔진으로 발전하였기 때문에 기존 MS-SQL에 익숙�
         하둡처럼 노드기반 분산 데이터베이스 클러스터와 유사  
         예를 들어 노드는 10개가 있고 10초가 걸리는 쿼리 실행시 MPP구조에서는 병렬실행이기에 실제 소요시간은 1초.
         
+        ```sql
+        CREATE TABLE dbo.T1
+        (   
+            C1      INT IDENTITY(1,1) NOT NULL
+            , C2    INT NULL
+        );
+
         * 기존 온프레미스의 증설은 CPU, Memory, 디스크 같은 부품을 늘리는 스케일업(Scale-Up) 위주
         * 클라우드에서는 노드컴퓨터를 늘리는 스케일아웃(Scale-Out) 개념. Azure DW는 사용하는 사람은 먼저 이 분산컴퓨팅 환경을 이해 필요. Distribution(분산)의 개념을 알아야 한다.  
             <kbd>
