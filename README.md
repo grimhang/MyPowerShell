@@ -21,7 +21,8 @@ MS-SQL을 기본 엔진으로 발전하였기 때문에 기존 MS-SQL에 익숙�
             C1      INT IDENTITY(1,1) NOT NULL
             , C2    INT NULL
         );
-
+        ```
+        
         * 기존 온프레미스의 증설은 CPU, Memory, 디스크 같은 부품을 늘리는 스케일업(Scale-Up) 위주
         * 클라우드에서는 노드컴퓨터를 늘리는 스케일아웃(Scale-Out) 개념. Azure DW는 사용하는 사람은 먼저 이 분산컴퓨팅 환경을 이해 필요. Distribution(분산)의 개념을 알아야 한다.  
             <kbd>
