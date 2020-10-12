@@ -1,12 +1,13 @@
 # Tibero 조사 쿼리(Simple)
 
-Chem의 티베로의 조사를 하는 쿼리
+Chem의 티베로의 조사를 하는 쿼리   
 
-## 1 테이블의 ROWS 수 확인
-    
+## 1. Tibero ASIS조사 쿼리
+ASIS Tibero 5.0 기준
+
+* #### 1.1 Table rows 갯수 조사 쿼리
     단, 주의해야 할것은 테이블의 통계가 업데이트 되기 전에는 정확한 로우 갯수를 알 수가 없다.
     이 쿼리는 통계가 잘 업데이트 되는 시스템에서 신속하게 갯수를 알기 위해 쓰인다.
-    
     ```sql
     SELECT A.OWNER AS "소유자", A.OBJECT_TYPE AS "오브젝트타입", A.OBJECT_NAME AS "오브젝트명"
         --, COUNT(A.OBJECT_NAME) AS "개수" 
@@ -14,8 +15,9 @@ Chem의 티베로의 조사를 하는 쿼리
     FROM dba_objects AS A
         LEFT OUTER JOIN all_tables AS B		ON  A.OWNER = B.OWNER	AND A.object_name = B.table_name
     WHERE A.OWNER = '소유자명대문자'
-    GROUP BY A.OWNER, A.OBJECT_TYPE, A.OBJECT_NAME, B.NUM_ROWS;
+    GROUP BY A.OWNER, A.OBJECT_TYPE, A.OBJECT_NAME, B.NUM_ROWS; 
     ```
+
         
         * 기존 온프레미스의 증설은 CPU, Memory, 디스크 같은 부품을 늘리는 스케일업(Scale-Up) 위주
         * 클라우드에서는 노드컴퓨터를 늘리는 스케일아웃(Scale-Out) 개념. Azure DW는 사용하는 사람은 먼저 이 분산컴퓨팅 환경을 이해 필요. Distribution(분산)의 개념을 알아야 한다.  
