@@ -6,25 +6,80 @@ Chem의 티베로의 조사를 하는 쿼리
 ASIS Tibero 5.0 기준
 
 * #### 1.1 인스턴스 조사
-    
-
     ```sql
     SELECT * FROM V$INSTANCE;
     ```
 
-* #### 1.1 Table rows 갯수 조사 쿼리
-    단, 주의해야 할것은 테이블의 통계가 업데이트 되기 전에는 정확한 로우 갯수를 알 수가 없다.
-    이 쿼리는 통계가 잘 업데이트 되는 시스템에서 신속하게 갯수를 알기 위해 쓰인다..
-
+* #### 1.2 캐릭터셋 조사
     ```sql
-    SELECT A.OWNER AS "소유자", A.OBJECT_TYPE AS "오브젝트타입", A.OBJECT_NAME AS "오브젝트명"
-        --, COUNT(A.OBJECT_NAME) AS "개수" 
-        , NVL(B.NUM_ROWS,'') AS "ROWS"
-    FROM dba_objects AS A
-        LEFT OUTER JOIN all_tables AS B		ON  A.OWNER = B.OWNER	AND A.object_name = B.table_name
-    WHERE A.OWNER = '소유자명대문자'
-    GROUP BY A.OWNER, A.OBJECT_TYPE, A.OBJECT_NAME, B.NUM_ROWS; 
+    SELECT * FROM DATABASE_PROPERTIES WHERE NAME IN ('NLS_CHARACTERSET','NLS_NCHAR_CHARACTERSET');
     ```
+
+* #### 1.3 국가 / 언어 
+    ```sql
+    SELECT * FROM V$PARAMETERS WHERE NAME IN ( 'NLS_DATE_LANGUAGE','NLS_DATE_FORMAT');
+    ```
+
+* #### 1.4 현재 세션 리스트 
+    ```sql
+    SELECT username,TYPE, MACHINE, OSUSER,PROG_NAME, COUNT(1)
+    FROM v$session
+    GROUP BY username,TYPE, MACHINE, OSUSER,PROG_NAME;
+    ```
+
+* #### 1.5 소유자별 오브젝트 갯수 
+    ```sql
+    SELECT owner, object_type, count(*) CNT
+    FROM dba_objects 
+    WHERE owner  not in ('SYS','SYSCAT','SYSGIS','PUBLIC','OUTLN','TIBERO','WMSYS')
+    GROUP BY owner, object_type
+    ORDER BY owner,object_type;
+    ```
+
+* #### 1.6 INVALID 찾기
+    ```sql
+    SELECT OWNER, OBJECT_NAME, OBJECT_TYPE,  STATUS
+    FROM DBA_OBJECTS
+    WHERE OWNER NOT IN ('SYS','SYSCAT','SYSGIS','OUTLN','WMSYS','TIBERO','TIBERO1','PUBLIC')
+        AND STATUS < > 'VALID';
+    ```
+
+* #### 1.7 계정 상태
+    ```sql
+    SELECT USERNAME,DEFAULT_TABLESPACE,DEFAULT_TEMP_TABLESPACE,PROFILE,ACCOUNT_STATUS,CREATED
+    FROM DBA_USERS A
+    ORDER BY DECODE(USERNAME,'SYS',2,'SYSCAT',2,'SYSGIS',2,'OUTLN',2,'WMSYS',2,'TIBERO',2,'TIBERO1',2,1);
+    ```
+
+* #### 1.8 계정별 용량
+    ```sql
+    SELECT owner , sum(bytes/1024/1024) SizeMB
+    FROM dba_segments
+    GROUP BY owner ;
+    ```
+
+* #### 1.9 테이블별 용량
+    ```sql
+    SELECT OWNER, TABLE_NAME, TABLESPACE_NAME
+        ,SUM(NOMAL_COL)/1024/1024 NOMAL_COL_SIZE_MB
+        ,SUM(LOB_COL)/1024/1024 LOB_COL_SIZE_MB
+    FROM
+    (
+        SELECT A.OWNER, DECODE(A.SEGMENT_TYPE,'LOB',B.TABLE_NAME,A.SEGMENT_NAME) TABLE_NAME, A.SEGMENT_TYPE
+            , A.TABLESPACE_NAME
+            , DECODE(A.SEGMENT_TYPE,'LOB',0,A.BYTES) NOMAL_COL
+            , DECODE(A.SEGMENT_TYPE,'LOB',A.BYTES,0) LOB_COL
+        FROM DBA_SEGMENTS A
+                , DBA_LOBS B 
+        WHERE A.OWNER NOT IN ('SYS','SYSCAT','SYSGIS','OUTLN','WMSYS','TIBERO','TIBERO1')
+        AND A.SEGMENT_TYPE IN ('TABLE','LOB')
+        AND A.OWNER = B.OWNER(+)
+        AND A.SEGMENT_NAME = B.SEGMENT_NAME(+)
+    )
+    GROUP BY OWNER,TABLE_NAME,TABLESPACE_NAME;
+    ```
+
+
 
 
 
