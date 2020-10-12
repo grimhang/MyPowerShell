@@ -15,7 +15,7 @@ ASIS Tibero 5.0 기준
     SELECT * FROM DATABASE_PROPERTIES WHERE NAME IN ('NLS_CHARACTERSET','NLS_NCHAR_CHARACTERSET');
     ```
 
-* #### 1.3 국가 / 언어 
+* #### 1.3 국가 / 언어
     ```sql
     SELECT * FROM V$PARAMETERS WHERE NAME IN ( 'NLS_DATE_LANGUAGE','NLS_DATE_FORMAT');
     ```
@@ -83,33 +83,61 @@ ASIS Tibero 5.0 기준
 
 
 
-## 2. Azure SQL 테이블 설계 Best Practice
-<kbd>
-    <img src="image/02_picture-flow.png" width="500" border="2">  
-</kbd>
+## 2. Tibero Import / Export Util 사용법
 
-* #### 2.1 데이터 마이그레이션
+* #### 2.1 tbexport
     * 데이터 로딩시 권장사항  
-        Azure Data Lake Store 또는 Azure Blob Storage에서 Polybase로 DW에 데이터 로드 
     
-    * 테이블 디자인 시 기본 권장사항
-        * 분산     ==>   라운드 로빈
-        * 인덱싱   ==>   힙
-        * 분할     ==>   없음
-        * 리소스클래스  ==>   largerc 또는 xlargerc
+    ```
+    tbexport sid=mydb username=myuser password=a!3gakld File=C:\_LG화학\EXPORT\TEST.dat script=y IP=192.168.0.1 USER=myapple GRANT=N
+    ```
 
-* #### 2.2 테이블 분산시 고려사항
-    * a. 테이블 복제     : 디멘션 테이블과 같이 사이즈가 작은 테이블
-    * b. 라운드로빈      : 랜덤으로 데이터를 분산시킴
-    * c. 해시            : 팩트 테이블 or 대형 차원 테이블과 해시 분산 키  
+    옵션 설명
+    * a. File
+        export 받을 대상 파일
 
-    * 팁
-        * 라운드 로빈으로 시작하지만 대규모 병렬 아키텍처를 활용하는 해시 분산 전략을 목표로 합니다.
-        * 공통 해시 키의 데이터 형식이 동일한지 확인합니다.
-        * varchar 형식에 배포하지 않습니다. (INT와 datetime 을 권장하나 부득이할 경우 varchar도 가능)
-        * 조인 작업이 빈번한 팩트 테이블에 대한 공통 해시 키가 있는 차원 테이블은 해시 분산될 수 있습니다.
-        * sys.dm_pdw_nodes_db_partition_stats 를 사용하여 데이터의 모든 왜곡도를 분석합니다.
-        * sys.dm_pdw_request_steps 를 사용하여 쿼리의 백그라운드 데이터 이동 분석, 시간 브로드캐스트 모니터링 및 작업 순서 섞기를           수행합니다. 이는 분산 전략을 검토하는 데 유용합니다.  
+    * b. script
+        스크립트를 같이 받을지 여부 default는 N
+
+    * c. IP
+        Export 대상 Tibero 서버의 IP 주소를 입력한다. (기본값: localhost)
+
+    * d. USER
+        Export를 수행할 때 권한의 Export 여부를 지정 (기본값: Y)
+
+    * e. GRANT
+        사용자 모드로 Export를 수행할 때 Export될 객체의 소유자를 지정한다.
+        이거 지정하면 해당 유저의 모든 Object 대상
+
+    * f. ROWS
+        export를 수행할 때 테이블의 데이터를 Export할지 여부를 지정 (기본값: Y)
+        테이블생성 스크립트만 할때는 N을 지정
+
+
+
+* #### 2.2 tbimport
+    ```    
+    tbimport IP=192.168.0.1 sid=mydb USER=myuser username=myuser password=abdk@dj2 File=E:\dbadm\Sungchool\CERT_USER_20200924.dat COMMIT=Y
+    ```
+
+    * a. IP        
+        Export 대상 Tibero 서버의 IP 주소를 입력한다. (기본값: localhost)
+
+    * b. COMMIT        
+        insert 작업 후에 commit을 수행한다. (기본값: N)        
+            * CPL로 import할 때 기본적으로 bind insert buffer size인 1MB를 넘었을 때 commit을 수행
+            * DPL로 import할 때 BIND_BUF_SIZE로 지정된 크기를 넘었을 때 commit을 수행한다.
+	
+    * c. DPL
+        DPL(Direct Path Load) 방법으로 Import할지 여부를 지정. (기본: N)
+
+    * d. BIND_BUF_SIZE
+        Import를 DPL 모드로 실행할 때 stream에서 사용하는 bind buffer의 크기. (기본값: 1MB(1048576))
+
+    * e. File
+        export 받을 대상 파일
+
+    
 
 * #### 2.3 테이블 인덱싱
     * a. 힙
