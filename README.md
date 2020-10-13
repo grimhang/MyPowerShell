@@ -80,9 +80,6 @@ ASIS Tibero 5.0 기준
     ```
 
 
-
-
-
 ## 2. Tibero Import / Export Util 사용법
 
 * #### 2.1 tbexport
@@ -136,5 +133,8 @@ ASIS Tibero 5.0 기준
 
     * e. File   
         export 받을 대상 파일
+    
+    * f. test   
+        test 받을 대상 파일
 
     
