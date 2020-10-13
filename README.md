@@ -127,13 +127,13 @@ ASIS Tibero 5.0 기준
             - CPL로 import할 때 기본적으로 bind insert buffer size인 1MB를 넘었을 때 commit을 수행   
             - DPL로 import할 때 BIND_BUF_SIZE로 지정된 크기를 넘었을 때 commit을 수행한다.
 	
-    * c. DPL
+    * c. DPL   
         DPL(Direct Path Load) 방법으로 Import할지 여부를 지정. (기본: N)
 
-    * d. BIND_BUF_SIZE
+    * d. BIND_BUF_SIZE   
         Import를 DPL 모드로 실행할 때 stream에서 사용하는 bind buffer의 크기. (기본값: 1MB(1048576))
 
-    * e. File
+    * e. File   
         export 받을 대상 파일
 
     
