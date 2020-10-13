@@ -92,23 +92,23 @@ ASIS Tibero 5.0 기준
     ```
 
     옵션 설명
-    * ##### a. File
+    * a. File   
         export 받을 대상 파일
 
-    * ##### b. script
+    * b. script   
         스크립트를 같이 받을지 여부 default는 N
 
-    * ##### c. IP
+    * c. IP   
         Export 대상 Tibero 서버의 IP 주소를 입력한다. (기본값: localhost)
 
-    * ##### d. USER
+    * d. USER   
         Export를 수행할 때 권한의 Export 여부를 지정 (기본값: Y)
 
-    * ##### e. GRANT
+    * e. GRANT   
         사용자 모드로 Export를 수행할 때 Export될 객체의 소유자를 지정한다.
         이거 지정하면 해당 유저의 모든 Object 대상
 
-    * f. ROWS
+    * f. ROWS   
         export를 수행할 때 테이블의 데이터를 Export할지 여부를 지정 (기본값: Y)
         테이블생성 스크립트만 할때는 N을 지정
 
