@@ -115,7 +115,7 @@ ASIS Tibero 5.0 기준
 
 
 
-* #### 2.2 tbimport
+    #### 2.2 tbimport
     ```    
     tbimport IP=192.168.0.1 sid=mydb USER=myuser username=myuser password=abdk@dj2 File=E:\dbadm\Sungchool\CERT_USER_20200924.dat COMMIT=Y
     ```
