@@ -354,3 +354,5 @@ ASIS Tibero 5.0 기준
 
 MPP 구조를 가진 다른 클라우드 경쟁 제품(AWS Redshift, Snowflake.net, Google Big Query, Alibaba Cloud Max)들도 동일한 제약을
 가지고 있고 아키텍처 구조의 특징이기 때문에 이런 점을 이해해야 성공적인 프로젝트가 될수 있습니다.
+
+test
