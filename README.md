@@ -85,33 +85,33 @@ ASIS Tibero 5.0 기준
 
 ## 2. Tibero Import / Export Util 사용법
 
-* #### 2.1 tbexport
-    데이터 로딩시 권장사항  
-    
-    ```
-    tbexport sid=mydb username=myuser password=a!3gakld File=C:\_LG화학\EXPORT\TEST.dat script=y IP=192.168.0.1 USER=myapple GRANT=N
-    ```
+    * #### 2.1 tbexport
+        데이터 로딩시 권장사항  
+        
+        ```
+        tbexport sid=mydb username=myuser password=a!3gakld File=C:\_LG화학\EXPORT\TEST.dat script=y IP=192.168.0.1 USER=myapple GRANT=N
+        ```
 
-    옵션 설명
-    * ##### a. File
-        export 받을 대상 파일
+        옵션 설명
+        * ##### a. File
+            export 받을 대상 파일
 
-    * ##### b. script
-        스크립트를 같이 받을지 여부 default는 N
+        * ##### b. script
+            스크립트를 같이 받을지 여부 default는 N
 
-    * ##### c. IP
-        Export 대상 Tibero 서버의 IP 주소를 입력한다. (기본값: localhost)
+        * ##### c. IP
+            Export 대상 Tibero 서버의 IP 주소를 입력한다. (기본값: localhost)
 
-    * ##### d. USER
-        Export를 수행할 때 권한의 Export 여부를 지정 (기본값: Y)
+        * ##### d. USER
+            Export를 수행할 때 권한의 Export 여부를 지정 (기본값: Y)
 
-    * ##### e. GRANT
-        사용자 모드로 Export를 수행할 때 Export될 객체의 소유자를 지정한다.
-        이거 지정하면 해당 유저의 모든 Object 대상
+        * ##### e. GRANT
+            사용자 모드로 Export를 수행할 때 Export될 객체의 소유자를 지정한다.
+            이거 지정하면 해당 유저의 모든 Object 대상
 
-    * f. ROWS
-        export를 수행할 때 테이블의 데이터를 Export할지 여부를 지정 (기본값: Y)
-        테이블생성 스크립트만 할때는 N을 지정
+        * f. ROWS
+            export를 수행할 때 테이블의 데이터를 Export할지 여부를 지정 (기본값: Y)
+            테이블생성 스크립트만 할때는 N을 지정
 
 
 
