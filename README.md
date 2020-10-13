@@ -133,6 +133,3 @@ ASIS Tibero 5.0 기준
 
     * e. File   
         export 받을 대상 파일
-
-
-    
