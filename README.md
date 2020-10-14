@@ -85,6 +85,14 @@ ASIS Tibero 5.0 기준
         LEFT JOIN DBA_CONSTRAINTS C  	ON T.OWNER = C.OWNER AND T.TABLE_NAME = C.TABLE_NAME AND C.CONSTRAINT_TYPE = 'P';
     ```
 
+* #### 1.10 오브젝트 종류별 갯수
+    ```sql
+    SELECT OWNER, OBJECT_TYPE, COUNT(*) CNT
+    FROM DBA_OBJECTS 
+    WHERE OWNER NOT IN ('SYS', 'OUTLN', 'WMSYS', 'SYSGIS', 'SYSCAT', 'PUBLIC')
+    GROUP BY OWNER, OBJECT_TYPE
+    ORDER BY OWNER, OBJECT_TYPE
+    ```
 
 ## 2. Tibero Import / Export Util 사용법
 
