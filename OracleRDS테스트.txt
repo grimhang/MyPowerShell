@@ -1,0 +1,129 @@
+1 S3 버킷 
+	1.1. S3 버킷 만들기
+		버킷 이름 : s3fororaclerds
+		보안 : 퍼블릭 액세스 차단을 활성화(기본값)
+		
+	1.2 파일 업로드 함
+		DaVi_Win.zip 1.4GB
+	
+2. Oracle RDS 생성	
+	2.1 Oracle RDS 생성
+		a. 엔진 옵션
+			- 엔진 유형 : Oracle
+			- 에디션 : Oracle Standard Edition Two
+			- 라이센스 : license-included
+			- 버전 : Oracle 19.0.0.0.ru 최신
+		
+		b. 템플릿
+			- 개발/테스트
+			
+		c. 설정
+			- DB인스턴스 식별자 (호스트네임) : oraclerdsdb
+			- 자격 증명 설정
+				마스트 사용자 이름 : dbadmin
+				마스터 암호 : dbadmin2020!
+		
+		d. DB 인스턴스 크기
+			- 메모리 최적화 클래스 선택
+			- db.r5.large 선택
+			
+		e. 스토리지
+			- 범용 SSD
+			- 할당된 스토리지 : 20Gib
+			- 스토리지 자동 조정 활성화 비활성
+			
+		f. 가용성 및 내구성
+			대기 인스턴스 생성안함
+			
+	    g. 연결
+		   - Default VPC
+		   
+		   - 추가 연결 구성
+				서브넷 : 기본값
+				퍼블릭 액세스 가능 : yes 주의: 나는 테스트용이기 때문에 가능인데 보통은 불가능
+				
+		h. 데이터베이스 인증
+			- 암호 인증
+			
+		i. 추가 구성
+			- 데이터베ㅇ스 옵션
+				초기 데이터베이스 이름 : dbchool
+				옵션 그룹 :디폴트로 (db-option-group-chool) 요건 나중에 적용
+				문자 집합 : UTF8
+				
+			- 백업 
+				자동 백업 활성화 체크 해제
+			
+			- 암호화
+				암호화 활성화 체크 해제
+				
+			- 성능 개선 도우미 활성화 체크 해제
+			- 모니터링 활성화 체크 해제
+			- 로그 내보내기 모두 체크 해제
+			- 유지 관리
+				유지 관리 기잔 설정 없음 선택
+			
+			
+3. Oracle RDS 와 S3 버킷 사이의 통합을 위한 사전 조건
+	3.1 IAM정책 생성
+		a. 정책 생성 버튼
+		b. 서비스 선택 에서 S3 선택
+		c. 작업에서 IAM정책에 필요한 버킷 권한 및 객체 권한 선택
+			- GetObject – Amazon S3 버킷에서 Amazon RDS로 파일을 전송하는 데 필요합니다.
+			- ListBucket – Amazon S3 버킷에서 Amazon RDS로 파일을 전송하는 데 필요합니다.
+			- PutObject – Amazon RDS에서 Amazon S3 버킷으로 파일을 전송하는 데 필요합니다. 
+		d. 리소스를 클릭해 ARN 추가
+			- bucket : arn:aws:s3:::s3fororaclerds
+			- object : bucket name * 은 s3fororaclerds
+					   object name * 은 모두 선택
+        f. 정책 검토
+			이름 : rds-s3-integration-policy
+			정책 생성 버튼 클릭
+
+	3.2 IAM 역할 생성 for Oracle RDS
+		a. IAM 왼쪽 메뉴에서 역할 선택
+		b. 역할 만들기
+		c. AWS 서비스에서 RDS 선택
+		d. 사용 사례 선택에서 RDS - Add Role to Database 클릭한후 "다음:권한" 버튼 클릭
+		e. 권한 정책 연결에서 내가 생성한 IAM 정책(rds-s3-integration-policy)을 꼭 선택(주의)하고 "다음:태그" 버튼 클릭
+		f. "다음:검토" 버튼 클릭
+		g. 역할 이름 : rds-s3-integration-role 하고 "역할 만들기" 버튼 클릭
+		
+4. IAM역할을 DB인스턴스에 연결		
+	4.1 인스턴스 클릭하여 맨 아래  IAM 역할 관리에서
+		a. 이 인스턴스에 IAM 역할 추가 : rds-s3-integration-role
+								기능   : S3_INTEGRATION 선택하고 "역할 추가"
+								
+5. s3 통합 옵션 추가								
+	5.1 옵션 그룹에서 그룹 생성
+	5.2 oracleoptiongroup2 이름으로 하고 
+	5.3 S3_INTEGRATION 옵션 추가
+	5.4 DB인스턴스의 구성 탭에서 수정을 누르고 옵션 그룹을 oracleoptiongroup2 으로 바꾸고 즉시 적용을 선택 하고 적용함
+	5.5 인스턴스 수정중이라고 뜨고 약 3분후에 사용가능 뜰때 다음 쿼리 수행	
+	
+	
+6. s3에서 RDS의 DATA_PUMP_DIR 디렉터리로 파일 다운로드
+	6.1 파일 다운로드
+		SELECT rdsadmin.rdsadmin_s3_tasks.download_from_s3(
+		  p_bucket_name    =>  's3fororaclerds',       
+		  p_directory_name =>  'DATA_PUMP_DIR') 
+	   AS TASK_ID FROM DUAL;
+	   
+	   s3fororaclerds버킷에 있는 모든 파일을 RDS의 DATA_PUMP_DIR 디렉터리에 다운로드
+	   
+	6.2 다운로드 상황 모니터링
+	   SELECT text FROM table(rdsadmin.rds_file_util.read_text_file('BDUMP','dbtask-1603031448477-58.log'));  
+	   task_id : 1603031448477-58
+	   바꾸고 실행하면 작업 결과 나옴
+	   
+	6.3 DATA_PUMP_DIR 안의 파일들 보기
+	   SELECT * FROM table(rdsadmin.rds_file_util.listdir('DATA_PUMP_DIR')) order by mtime;
+	   
+	6.4 모든 디렉터리 나열
+		select * from dba_directories;
+		참고 : https://matthiashoys.wordpress.com/2019/12/19/useful-scripts-for-working-with-oracle-directories-on-aws-rds/
+		
+	6.5 단일 파일 삭제
+		begin
+			UTL_FILE.FREMOVE ('DATA_PUMP_DIR', 'DaVi_Win.zip');
+		end;
