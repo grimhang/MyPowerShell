@@ -148,3 +148,16 @@ ASIS Tibero 5.0 기준
     * e. File   
         export 받을 대상 파일
 
+
+## 3. Tibero 내장 기본 계정
+
+* #### 3.1 계정       
+   
+    |계정|설명|
+    |------|---|
+    |SYS|오라클 내장 root 권한 기본 계정|
+    |SYSCAT|딕셔너리를 관리하는 내장 계정|
+    |OUTLN|동일한 SQL을 수행할 때 항상 같은 질의 플랜(plan)으로 수행될 수 있게 관련 힌트(hint)를 저장|
+    |SYSGIS|GIS(Geographic Information System)와 관련된 테이블 생성 및 관리를 하는 계정|
+    |TIBERO|CONNECT, RESOURCE, DBA 역할이 부여된 본보기 사용자 계정|
+    |TIBERO1|CONNECT, RESOURCE, DBA 역할이 부여된 본보기 사용자 계정|
