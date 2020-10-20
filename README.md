@@ -116,7 +116,7 @@ ASIS Tibero 5.0 기준
     * d. USER   
         사용자 모드로 Export를 수행할 때 Export될 객체의 소유자를 지정
 
-    * e. GRANT           	
+    * e. GRANT   
         Export를 수행할 때 권한의 Export 여부를 지정(default: Y)        
 
     * f. ROWS   
