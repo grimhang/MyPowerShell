@@ -105,7 +105,7 @@ ASIS Tibero 5.0 기준
     LEFT OUTER JOIN all_tables AS B 
         ON  A.OWNER = B.OWNER
         AND A.object_name = B.table_name
-    WHERE A.OWNER = '사용자명'
+    WHERE A.OWNER = '사용자명' AND A.OBJECT_TYPE = 'TABLE'
     GROUP BY A.OWNER, A.OBJECT_TYPE, A.OBJECT_NAME, B.NUM_ROWS;
     ```
 
