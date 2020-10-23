@@ -95,6 +95,20 @@ ASIS Tibero 5.0 기준
     ORDER BY OWNER, OBJECT_TYPE
     ```
 
+* #### 1.11 테이블 로우수 구하기
+    통계 업데이트 선행되어야 제대로 보인다.
+
+    ```sql
+    SELECT A.OWNER AS "소유자", A.OBJECT_TYPE AS "오브젝트타입", A.OBJECT_NAME AS "오브젝트명", 
+        COUNT(A.OBJECT_NAME) AS "개수" ,NVL(B.NUM_ROWS,'') AS "ROWS"
+    FROM dba_objects AS A
+    LEFT OUTER JOIN all_tables AS B 
+        ON  A.OWNER = B.OWNER
+        AND A.object_name = B.table_name
+    WHERE A.OWNER = '사용자명'
+        GROUP BY A.OWNER, A.OBJECT_TYPE, A.OBJECT_NAME, B.NUM_ROWS;
+    ```
+
 ## 2. Tibero Import / Export Util 사용법
 
 * #### 2.1 tbexport
