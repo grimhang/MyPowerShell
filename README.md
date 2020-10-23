@@ -106,7 +106,7 @@ ASIS Tibero 5.0 기준
         ON  A.OWNER = B.OWNER
         AND A.object_name = B.table_name
     WHERE A.OWNER = '사용자명'
-        GROUP BY A.OWNER, A.OBJECT_TYPE, A.OBJECT_NAME, B.NUM_ROWS;
+    GROUP BY A.OWNER, A.OBJECT_TYPE, A.OBJECT_NAME, B.NUM_ROWS;
     ```
 
 ## 2. Tibero Import / Export Util 사용법
