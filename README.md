@@ -7,7 +7,17 @@ ASIS Tibero 5.0 기준
 
 * #### 1.1 인스턴스 조사
     ```sql
+    -- 인스턴스 정보
     SELECT * FROM V$INSTANCE;
+
+    -- DB정보
+    SELECT * FROM V$DATABASE;
+
+    -- 빌드버전 확인
+    SELECT * FROM V$VERSION;
+
+    -- 데모인지 아닌지
+    SELECT * FROM V$LICENSE;
     ```
 
 * #### 1.2 캐릭터셋 조사
