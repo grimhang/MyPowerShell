@@ -52,14 +52,30 @@ ASIS Tibero 5.0 기준
         , USERNAME;
     ```
 
-* #### 1.8 계정별 용량
+* #### 1.8 계정별 권한
+    ```sql
+    -- a. 시스템 권한   
+    SELECT * FROM DBA_SYS_PRIVS WHERE GRANTEE = 'SYS' ;
+
+    -- b. 사용자에게 부여된 롤 확인(시스템 권한이 롤에 포함됨)
+    SELECT * FROM DBA_ROLE_PRIVS WHERE GRANTEE = 'SYS' ;
+
+    -- c. 사용자에게 부여된 롤에 부여된 시스템 권한 확인
+    SELECT * FROM DBA_SYS_PRIVS WHERE GRANTEE = 'SYS' ;
+
+    -- d. 타 사용자에게 부여한 객체(테이블등) 권한 확인
+    SELECT * FROM DBA_TAB_PRIVS WHERE OWNER = 'SYS' ;
+    ```
+
+
+* #### 1.9 계정별 용량
     ```sql
     SELECT owner , sum(bytes/1024/1024) SizeMB
     FROM dba_segments
     GROUP BY owner ;
     ```
 
-* #### 1.9 테이블별 용량
+* #### 1.10 테이블별 용량
     ```sql
     SELECT T.OWNER, T.TABLE_NAME, T.TABLESPACE_NAME, T.NOMAL_COL_SIZE_MB, T.LOB_COL_SIZE_MB
         , DECODE(C.CONSTRAINT_TYPE, 'P', 'Y', 'N') PK_YN
@@ -86,7 +102,7 @@ ASIS Tibero 5.0 기준
         LEFT JOIN DBA_CONSTRAINTS C  	ON T.OWNER = C.OWNER AND T.TABLE_NAME = C.TABLE_NAME AND C.CONSTRAINT_TYPE = 'P';
     ```
 
-* #### 1.10 오브젝트 종류별 갯수
+* #### 1.11 오브젝트 종류별 갯수
     ```sql
     SELECT OWNER, OBJECT_TYPE, COUNT(*) CNT
     FROM DBA_OBJECTS 
@@ -95,7 +111,7 @@ ASIS Tibero 5.0 기준
     ORDER BY OWNER, OBJECT_TYPE
     ```
 
-* #### 1.11 테이블 로우수 구하기
+* #### 1.12 테이블 로우수 구하기
     통계 업데이트 선행되어야 제대로 보인다.
 
     ```sql
