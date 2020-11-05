@@ -126,13 +126,12 @@ ASIS Tibero 5.0 기준
 
     ```sql
     SELECT A.OWNER AS "소유자", A.OBJECT_NAME AS "오브젝트명" 
-        , NVL(B.NUM_ROWS,'') AS "ROWS"
+        , B.NUM_ROWS AS "ROWS"
     FROM dba_objects AS A
-    LEFT OUTER JOIN all_tables AS B 
-        ON  A.OWNER = B.OWNER AND A.object_name = B.table_name
-    WHERE A.OWNER = '사용자명'
-        AND A.OBJECT_TYPE = 'TABLE'
-    GROUP BY A.OWNER, A.OBJECT_NAME, B.NUM_ROWS;   
+        JOIN all_tables AS B
+            ON  A.OWNER = B.OWNER AND A.object_name = B.table_name
+    WHERE A.OWNER IN ('계정')
+    ORDER BY A.OWNER, A.OBJECT_NAME; 
     ```
 
 ## 2. Tibero Import / Export Util 사용법
