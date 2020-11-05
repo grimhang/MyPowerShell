@@ -200,3 +200,25 @@ ASIS Tibero 5.0 기준
     |SYSGIS|GIS(Geographic Information System)와 관련된 테이블 생성 및 관리를 하는 계정|
     |TIBERO|CONNECT, RESOURCE, DBA 역할이 부여된 본보기 사용자 계정|
     |TIBERO1|CONNECT, RESOURCE, DBA 역할이 부여된 본보기 사용자 계정|
+
+## 4. Tibero 네트워크 제어
+
+* #### 4.1 전체 네트워크 제어
+    데이터 로딩시 권장사항  
+    
+    ```
+    SQL> ALTER SYSTEM LISTENER REMOTE OFF;
+    ```
+    * a. 해당 서버 로컬에서만 접속 가능. tbdsn.tbr에 IP가 localhost가 설정된 경우만
+    * b. 이미 접속된 세션은 계속 유지.
+
+* #### 4.2 IP 기반 네트워크 제어
+    파라메터파일(tip)에 ip리스트를 추가
+    
+    ```
+    LSNR_INVITED_IP=10.10.1.1;10.10.1.2
+    ```    
+    * a. localhost, 10.10.1.1, 10.10.1.2   오직 이 3개의 IP에서만 접속 가능
+    
+
+
