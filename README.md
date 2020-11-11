@@ -65,15 +65,12 @@ ASIS Tibero 5.0 기준
 * #### 1.8 계정별 권한
     ```sql
     -- a. 시스템 권한   
-    SELECT * FROM DBA_SYS_PRIVS WHERE GRANTEE = 'SYS' ;
+    SELECT * FROM DBA_SYS_PRIVS WHERE GRANTEE IN ('SYS') ;
 
     -- b. 사용자에게 부여된 롤 확인(시스템 권한이 롤에 포함됨)
-    SELECT * FROM DBA_ROLE_PRIVS WHERE GRANTEE = 'SYS' ;
+    SELECT * FROM DBA_ROLE_PRIVS WHERE GRANTEE IN ('SYS') ;        
 
-    -- c. 사용자에게 부여된 롤에 부여된 시스템 권한 확인
-    SELECT * FROM DBA_SYS_PRIVS WHERE GRANTEE = 'SYS' ;
-
-    -- d. 타 사용자에게 부여한 객체(테이블등) 권한 확인
+    -- c. 타 사용자에게 부여한 객체(테이블등) 권한 확인
     SELECT * FROM DBA_TAB_PRIVS WHERE OWNER = 'SYS' ;
     ```
 
