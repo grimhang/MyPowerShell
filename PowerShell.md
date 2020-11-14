@@ -19,6 +19,6 @@ ASIS  기준
 
     ```powershell
     -- 해당 번호로 상세 확인
-    PS C:\> Get-WinEvent -ProviderName "Microsoft-Windows-Kernel-General" | where recordid -e 11134 | fl *
+    PS C:\> Get-WinEvent -ProviderName "Microsoft-Windows-Kernel-General" | where recordid -eq 11134 | fl *
     ```
     
