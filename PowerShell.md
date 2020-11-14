@@ -14,6 +14,11 @@ ASIS  기준
     ```powershell
     -- 위에가 잘 안되면 
     PS C:\> Get-WinEvent -ProviderName "Microsoft-Windows-Kernel-General" `
-    >> | where id -in 12,13 | select timecreated, RecordID, Message -First 10 | ft -AutoSize
+      | where id -in 12,13 | select timecreated, RecordID, Message -First 10 | ft -AutoSize
+    ```
+
+    ```powershell
+    -- 해당 번호로 상세 확인
+    PS C:\> Get-WinEvent -ProviderName "Microsoft-Windows-Kernel-General" | where recordid -e 11134 | fl *
     ```
     
