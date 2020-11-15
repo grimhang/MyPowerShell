@@ -22,3 +22,8 @@ ASIS  기준
     PS C:\> Get-WinEvent -ProviderName "Microsoft-Windows-Kernel-General" | where recordid -eq 11134 | fl *
     ```
     
+## 2. 프로세스 검사
+* #### 2.1 가장 메모리 사용이 큰 Top 10 프로그램들의 리스트 텍스트로 뽑기
+  ```powershell
+    PS C:\> ps | sort WS -desc | select Name, @{n="WS(MB)";e={"{0,13:N0}" -f ($_.WS/1MB)}} -First 10 | Out-File pslist.txt
+  ```
