@@ -27,3 +27,7 @@ ASIS  기준
   ```powershell
     PS C:\> ps | sort WS -desc | select Name, @{n="WS(MB)";e={"{0,13:N0}" -f ($_.WS/1MB)}} -First 10 | Out-File pslist.txt
   ```
+
+  ```powershell
+    PS C:\> ps | sort WS -desc | ft name, id, @{n='VM(MB)';e={$_.vm/1MB};formatstring='N2';align='right'} -AutoSize
+  ```
