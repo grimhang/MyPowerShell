@@ -77,9 +77,10 @@ ASIS Tibero 5.0 기준
 
 * #### 1.9 계정별 용량
     ```sql
-    SELECT owner , sum(bytes/1024/1024) SizeMB
+    SELECT owner , TRUNC(sum(bytes/1024/1024), 0) SizeMB
     FROM dba_segments
-    GROUP BY owner ;
+    GROUP BY owner
+    ORDER BY SizeMB ;
     ```
 
 * #### 1.10 테이블별 용량
