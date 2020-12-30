@@ -1,5 +1,4 @@
 # Tibero 를 재 설치 하는 방법
-
 Tibero의 sid명 변경. Tibero 서비스 제거. Tibero 엔진 업그레이드 방법
 
 ## 1. Tibero 엔진 업그레이드
