@@ -215,15 +215,15 @@ Tibero 6.0 기준
 * #### 3.7. %TB_SID%의 환경변수 수정
     ```ps
         PS C:\> $env:tb_sid
-        -----------------------
-        PROCDB
+            -----------------------
+            PROCDB
     
         PS C:\> [Environment]::SetEnvironmentVariable('TB_SID', 'procdb',[EnvironmentVariableTarget]::Machine)    
         PS C:\> [Environment]::GetEnvironmentVariable('TB_SID', 'Machine')
         
         PS C:\$env:tb_sid
-        -----------------------
-        procdb
+            -----------------------
+            procdb
     ```
 
 * #### 3.8. tibero install
@@ -243,10 +243,9 @@ Tibero 6.0 기준
 
 * #### 3.9. tibero 서비스 상태 확인
     ```ps
-    PS C:\gsv tibero*
-    
-    ------------------------
-    Tibero_procdb
+    PS C:\gsv tibero*    
+        ------------------------
+        Tibero_procdb
     ```
 
 * #### 3.10. tip 파일 변경
