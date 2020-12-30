@@ -54,9 +54,9 @@ Tibero 6.0 기준
     C:\> tbboot -cs > c:\patch_work\csInfo.txt
 
     ```
-
-* #### 1.11 패치 시작
-* #### 1.12 tibero down
+---
+패치 시작
+* #### 1.11 tibero down
     ```
     C:\> tbdown immediate
     ```
@@ -65,26 +65,26 @@ Tibero 6.0 기준
     ```
     C:\> tasklist | find /i "tbsvr"
     ```
-* #### 1.13 작업 폴더로 이동
+* #### 1.12 작업 폴더로 이동
     ```
     C:\> cd %TB_HOME%\..        # C:\engn001 폴더인지 확인
     ```
 
-* #### 1.14 기존 Tibero -> tibero6_bak으로 변경
+* #### 1.13 기존 Tibero -> tibero6_bak으로 변경
     ```
     C:\> ren tibero6 tibero6_bak
     ```
 
-* #### 1.15 패치바이너리 압축풀기
-tibero6-bin-FS07_CS_1912-windows64_2008_1-185790-opt-20201026024156.zip 압축풀어서 tibero6 폴더를 C:\engn001 으로 move
+* #### 1.14 패치바이너리 압축풀기
+    tibero6-bin-FS07_CS_1912-windows64_2008_1-185790-opt-20201026024156.zip 압축풀어서 tibero6 폴더를 C:\engn001 으로 move
 
-* #### 1.16 tibero 설치에 필요한 파일 생성
+* #### 1.15 tibero 설치에 필요한 파일 생성
     ```
     C:\> %TB_HOME%\config\gen_tip.vbs
     C:\> %TB_HOME%\config\gen_psm_cmd.vbs
     ```
 
-* #### 1.17 기존바이이너리에 있던 파일들을 패치바이너리로 덮어쓰기 및 복사
+* #### 1.16 기존바이이너리에 있던 파일들을 패치바이너리로 덮어쓰기 및 복사
     ```
     C:\> copy tibero6_bak\license\license.xml %TB_HOME%\license\
     C:\> copy tibero6_bak\config\*.tip %TB_HOME%\config\
@@ -92,24 +92,24 @@ tibero6-bin-FS07_CS_1912-windows64_2008_1-185790-opt-20201026024156.zip 압축�
     C:\> copy tibero6_bak\client\config\*.cfg %TB_HOME%\client\config\
     ```
 
-* #### 1.18 ren tibero6_bak tibero6_패치날짜
+* #### 1.17 ren tibero6_bak tibero6_패치날짜
     ```
     C:\> ren tibero6_bak tibero6_20201211
     ```
 
-* #### 1.19 copy 확인
+* #### 1.18 copy 확인
     ```
     C:\> type %TB_HOME%\config\%TB_SID%.tip
     C:\> type %TB_HOME%\client\config\*.tbr
     ```
 
-* #### 1.20 버전 확인
+* #### 1.19 버전 확인
     ```
     C:\> tbboot -version
     C:\> tbboot -cs
     ```
 
-* #### 1.21 tibero 기동
+* #### 1.20 tibero 기동
     ```
     C:\> tbboot
     ```
