@@ -194,11 +194,6 @@ Tibero 6.0 기준
 * #### 3.5 Tibero 인스턴스 삭제
     ```
     C:\> %TB_HOME%/bin/tbuninstall.vbs
-    ```
-
-* #### 3.6 서비스가 삭제되었는지 확인
-    ```ps
-    PS C:\> Get-Service tibero*    
 
     ----------------------------------------------------------
     Microsoft (R) Windows Script Host 버전 5.812
@@ -210,6 +205,11 @@ Tibero 6.0 기준
     TB_SID = PROCDB
     service name = Tibero_PROCDB
     Tibero_PROCDB uninstalled successfully.
+    ```
+
+* #### 3.6 서비스가 삭제되었는지 확인
+    ```ps
+    PS C:\> Get-Service tibero*        
     ```
 
 * #### 3.7. %TB_SID%의 환경변수 수정
