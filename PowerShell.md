@@ -29,5 +29,5 @@ ASIS  기준
   ```
 
   ```powershell
-    PS C:\> ps | sort WS -desc | ft name, id, @{n='VM(MB)';e={$_.vm/1MB};formatstring='N2';align='right'} -AutoSize
+    PS C:\> ps | sort WS -desc | ft name, id, @{name='VM(MB)';expression={$_.VM/1MB};formatstring='N2';align='right'} -AutoSize
   ```
