@@ -66,8 +66,7 @@ ASIS  기준
     
     PS C:\> Get-Process | Sort-Object WS -Descending | Select-Object Name, @{n='WorkingSet Memory (MB)'; e={ '{0:N2}' -f ($PSItem.WS / 1MB)}} -First 10
     PS C:\> ps | Sort WS -Desc | Select Name, @{n='WorkingSet Memory (MB)'; e={ '{0:N2}' -f ($_.WS / 1MB)}} -First 10 #-f옵션은 select에서만 가능
-  ```  
-=======
+
     PS C:\> ps | sort WS -desc | ft name, id, @{name='VM(MB)';expression={$_.VM/1MB};formatstring='N2';align='right'} -AutoSize
   ```
->>>>>>> 9933625986b5d6ae463924acfeffac3759eb967d
+
