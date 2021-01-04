@@ -309,18 +309,17 @@ ASIS Tibero 5.0 기준
     ```    
     * localhost, 10.10.1.1, 10.10.1.2   오직 이 3개의 IP에서만 접속 가능
     
+   
+## 5. 아카이브로그 조회 tbsql로 
 
-## 4. 아카이브로그 조회 tbsql로
-    ```
+* #### 5.1 IP 기반 네트워크 제어    
     C:\> tbsql user/pw@ip:port/sid
     SQL> set linesize 150
     SQL> col owner for a20
     SQL> archive log list
     
-    ```
 
-## 5. tibero 이관스크립트
-    ```sql
+## 6. tibero 이관스크립트
     -- 오브젝트 카운팅. 위에 내용보다 더 자세한 버전
     WITH mig_user AS
     (
@@ -432,4 +431,3 @@ ASIS Tibero 5.0 기준
 
     -- b. Role 권한
     GRANT CONNECT, RESOURCE, DBA TO APPLE01USER;
-    ```    
