@@ -75,7 +75,7 @@ ASIS Tibero 5.0 기준
             SELECT USERNAME OWNER, USER_ID
             FROM DBA_USERS 
     --        WHERE username NOT IN ('SYS', 'SYSCAT', 'SYSGIS', 'OUTLN', 'WMSYS', 'TIBERO', 'TIBERO1')
-            WHERE username IN ('LOG01MAN')
+            WHERE username IN ('APPLE01USER')
         ) B
     )
     SELECT *
@@ -129,7 +129,7 @@ ASIS Tibero 5.0 기준
     (    
         SELECT USERNAME OWNER, USER_ID
         FROM DBA_USERS 
-        WHERE username IN ('LOG01MAN')
+        WHERE username IN ('APPLE01USER')
     )
     SELECT m.OWNER, con.CON_TYPE, COUNT(*) CNT
     FROM DBA_CONSTRAINTS con
@@ -256,7 +256,7 @@ ASIS Tibero 5.0 기준
 
 * #### 2.2 tbimport
     ```    
-    tbimport IP=192.168.0.1 sid=mydb USER=myuser username=myuser password=abdk@dj2 File=E:\dbadm\Sungchool\CERT_USER_20200924.dat COMMIT=Y
+    tbimport IP=localhost sid=mydb USER=myuser username=myuser password=abdk@dj2 File=E:\dbadm\Sungchool\CERT_USER_20200924.dat COMMIT=Y
     ```
 
     * a. IP        
@@ -310,4 +310,126 @@ ASIS Tibero 5.0 기준
     * localhost, 10.10.1.1, 10.10.1.2   오직 이 3개의 IP에서만 접속 가능
     
 
+## 4. 아카이브로그 조회 tbsql로
+    ```
+    C:\> tbsql user/pw@ip:port/sid
+    SQL> set linesize 150
+    SQL> col owner for a20
+    SQL> archive log list
+    
+    ```
 
+## 5. tibero 이관스크립트
+    ```sql
+    -- 오브젝트 카운팅. 위에 내용보다 더 자세한 버전
+    WITH mig_user AS
+    (
+        SELECT *
+        FROM 
+        (
+            SELECT 'DATABASE LINK' OBJECT_TYPE FROM DUAL UNION
+    --        SELECT 'DIRECTORY' OBJECT_TYPE FROM DUAL UNION ALL
+            SELECT 'FUNCTION' OBJECT_TYPE FROM DUAL UNION
+            SELECT 'INDEX' OBJECT_TYPE FROM DUAL UNION
+            SELECT 'JOB' OBJECT_TYPE FROM DUAL UNION
+            SELECT 'LOB' OBJECT_TYPE FROM DUAL UNION
+            SELECT 'PACKAGE' OBJECT_TYPE FROM DUAL UNION
+            SELECT 'PACKAGE BODY' OBJECT_TYPE FROM DUAL UNION
+            SELECT 'PROCEDURE' OBJECT_TYPE FROM DUAL UNION
+            SELECT 'SEQUENCE' OBJECT_TYPE FROM DUAL UNION
+            SELECT 'SYNONYM' OBJECT_TYPE FROM DUAL UNION         
+            SELECT 'TABLE' OBJECT_TYPE FROM DUAL UNION
+            SELECT 'TABLE PRIV' OBJECT_TYPE FROM DUAL UNION        
+            SELECT 'TRIGGER' OBJECT_TYPE FROM DUAL UNION
+            SELECT 'TYPE' OBJECT_TYPE FROM DUAL UNION
+            SELECT 'TYPE BODY' OBJECT_TYPE FROM DUAL UNION
+            SELECT 'VIEW' OBJECT_TYPE FROM DUAL
+        ) A, 
+        (
+            SELECT USERNAME OWNER, USER_ID
+            FROM DBA_USERS 
+    --        WHERE username NOT IN ('SYS', 'SYSCAT', 'SYSGIS', 'OUTLN', 'WMSYS', 'TIBERO', 'TIBERO1')
+            WHERE username IN ('APPLE01USER')
+        ) B
+    )
+    SELECT *
+    FROM 
+    (
+        SELECT m.OWNER OWNER
+            , m.object_type     
+            , SUM(
+                CASE
+                    WHEN O.OWNER IS NOT NULL                    THEN 1            
+                    WHEN P.OWNER IS NOT NULL                    THEN 1
+                    WHEN J.SCHEMA_USER IS NOT NULL              THEN 1
+                    WHEN SYN.OWNER IS NOT NULL                  THEN 1
+    --                WHEN PSYN.ORG_OBJECT_OWNER IS NOT NULL      THEN 1
+                    WHEN L.OWNER IS NOT NULL                    THEN 1
+    --                WHEN LP.OWNER IS NOT NULL                   THEN 1
+                    ELSE 0
+                END 
+                ) CNT
+        FROM mig_user m
+            LEFT JOIN DBA_OBJECTS o             ON o.owner = m.owner         AND o.object_type = m.object_type       AND O.OBJECT_TYPE NOT IN ('SYNONYM', 'DATABASE LINK') 
+            LEFT JOIN DBA_TAB_PRIVS P           ON P.OWNER = m.owner         AND M.object_type = 'TABLE PRIV' 
+            LEFT JOIN DBA_JOBS J                ON J.SCHEMA_USER = m.USER_ID    AND M.object_type = 'JOB'
+            LEFT JOIN DBA_SYNONYMS SYN          ON SYN.ORG_OBJECT_OWNER = m.owner       AND M.object_type = 'SYNONYM'            AND SYN.OWNER != 'PUBLIC'
+            LEFT JOIN DBA_DB_LINKS L            ON L.OWNER = m.owner         AND M.object_type = 'DATABASE LINK'                 AND L.OWNER != 'PUBLIC'
+        GROUP BY m.owner, m.object_type
+        UNION ALL    
+        SELECT 'PUBLIC' OWNER, 'JOB DBA', COUNT(*) CNT
+        FROM DBA_JOBS JD
+        WHERE SCHEMA_USER = 0
+        GROUP BY SCHEMA_USER    
+        UNION ALL    
+        SELECT B.OWNER, B.OBJECT_TYPE, COUNT(S.ORG_OBJECT_OWNER) CNT
+        FROM
+        (
+            SELECT 'PUBLIC' OWNER, 'SYNONYM PUBLIC' OBJECT_TYPE FROM DUAL
+        ) B 
+            LEFT JOIN DBA_SYNONYMS S    ON S.OWNER = 'PUBLIC' AND S.ORG_OBJECT_OWNER NOT IN ('SYS', 'SYSCAT', 'WMSYS', 'SYSGIS')
+        GROUP BY B.OWNER, B.OBJECT_TYPE  
+        UNION ALL    
+        SELECT 'PUBLIC' USERNAME, 'DATABASE LINK PUBLIC', COUNT(*) CNT
+        FROM DBA_DB_LINKS
+        WHERE OWNER = 'PUBLIC'
+    ) T
+    ORDER BY OWNER, object_type;
+
+    -- CONSTRAINT확인
+    WITH mig_user AS
+    (    
+        SELECT USERNAME OWNER, USER_ID
+        FROM DBA_USERS 
+        WHERE username IN ('APPLE01USER')
+    )
+    SELECT m.OWNER, con.CON_TYPE, COUNT(*) CNT
+    FROM DBA_CONSTRAINTS con
+        JOIN mig_user m         ON con.OWNER = m.OWNER
+    GROUP BY m.OWNER, con.CON_TYPE;
+
+    -- 05. 테이블 스페이스 생성
+    CREATE TABLESPACE 테이블스페이스명
+	DATAFILE 'D:\data001\LOG01\data\LOG01_DATA.DBF' SIZE 700M
+	AUTOEXTEND ON NEXT 50M
+	LOGGING
+	ONLINE 
+	EXTENT MANAGEMENT LOCAL AUTOALLOCATE;
+
+    -- 06. 유저 생성
+    CREATE USER 계정 IDENTIFIED BY 비번
+	DEFAULT TABLESPACE LOG01_DATA
+	TEMPORARY TABLESPACE LOG01_TEMP PROFILE DEFAULT;
+
+    -- 07.권한 주기     해야함
+    -- a. 시스템 권한
+    GRANT CREATE SESSION TO APPLE01USER;
+    GRANT CREATE TABLE TO APPLE01USER;
+    GRANT CREATE VIEW TO APPLE01USER;
+    GRANT CREATE ANY SEQUENCE TO APPLE01USER;
+    GRANT CREATE PROCEDURE TO APPLE01USER;
+    GRANT CREATE TRIGGER TO APPLE01USER;
+
+    -- b. Role 권한
+    GRANT CONNECT, RESOURCE, DBA TO APPLE01USER;
+    ```    
