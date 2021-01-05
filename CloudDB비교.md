@@ -5,11 +5,11 @@
 
 
 * #### 1.1 DB PaaS 비교
-|               |AWS   |          |Azure                   |                          |GCP          |     |
-|---------------|------|----------|------------------------|--------------------------|-------------|-----|
+|               |AWS   |          |Azure                   |                          |GCP          |        |
+|---------------|------|----------|------------------------|--------------------------|-------------|--------|
 |**관계형 DB**  |Aurora|MySQL     |Azure SQL               |Azure SQL Database        |Cloud Spanner|
 |               |      |PostgreSQL|                        |Azure SQL Managed Instance|             |
-|               |RDS   |MySQL     |Azure Database          |Database for MySQL        |Cloud SQL    |MySQL|
+|               |RDS   |MySQL     |Azure Database          |Database for MySQL        |Cloud SQL    |MySQL   |
 |               |      |PostgreSQL||Database for PostgreSQL|                          |PostgreSQL   |
 |               |      |MariaDB   ||Database for MariaDB   |                          |SQL Server   |
 |               |      |Oracle    |
